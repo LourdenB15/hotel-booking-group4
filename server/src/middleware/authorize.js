@@ -1,6 +1,4 @@
 import prisma from '../config/database.js';
-import { clerkClient } from '@clerk/express';
-import { findOrCreateUser } from '../utils/user.utils.js';
 
 export const authorize = (...roles) => {
   return async (req, res, next) => {
@@ -15,7 +13,7 @@ export const authorize = (...roles) => {
 
       const clerkUserId = req.auth.userId;
 
-      let user = await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: { clerkUserId },
         select: {
           id: true,
@@ -30,34 +28,11 @@ export const authorize = (...roles) => {
       });
 
       if (!user) {
-        try {
-          const clerkUser = await clerkClient.users.getUser(clerkUserId);
-
-          const email = clerkUser.primaryEmailAddress?.emailAddress || clerkUser.emailAddresses?.[0]?.emailAddress;
-
-          if (!email) {
-            return res.status(400).json({
-              success: false,
-              error: 'Bad Request',
-              message: 'User email not found in Clerk. Cannot create user account.'
-            });
-          }
-
-          user = await findOrCreateUser(clerkUserId, {
-            email,
-            firstName: clerkUser.firstName || null,
-            lastName: clerkUser.lastName || null
-          });
-
-          console.log(`✅ Auto-created user during authorization: ${user.email} (${user.id})`);
-        } catch (clerkError) {
-          console.error('Error fetching user from Clerk:', clerkError);
-          return res.status(500).json({
-            success: false,
-            error: 'Internal Server Error',
-            message: 'Failed to retrieve user information from authentication service.'
-          });
-        }
+        return res.status(404).json({
+          success: false,
+          error: 'User Not Found',
+          message: 'Your account was not found in our system. Please sign out and sign in again to sync your account.'
+        });
       }
 
       if (!roles.includes(user.role)) {

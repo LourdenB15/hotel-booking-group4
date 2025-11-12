@@ -9,7 +9,8 @@
     "start": "node src/index.js",
     "db:push": "npx prisma db push",
     "db:seed": "node prisma/seed.js",
-    "db:studio": "npx prisma studio"
+    "db:studio": "npx prisma studio",
+    "test:xendit": "node test-xendit-setup.js"
   },
   "keywords": [
     "hotel-booking",
@@ -22,12 +23,14 @@
   "dependencies": {
     "@clerk/express": "^1.0.0",
     "@prisma/client": "^5.9.1",
+    "axios": "^1.13.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "helmet": "^7.1.0",
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.9",
+    "svix": "^1.81.0",
     "xendit-node": "^4.0.0",
     "zod": "^3.22.4"
   },

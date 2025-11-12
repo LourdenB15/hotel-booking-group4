@@ -1,11 +1,10 @@
 import prisma from '../config/database.js';
-import { findOrCreateUser } from '../utils/user.utils.js';
+import { getUser } from '../utils/user.utils.js';
 import {
   calculateNumberOfNights,
   generateBookingId,
   calculateBookingPrice
 } from '../utils/booking.utils.js';
-import { clerkClient } from '@clerk/express';
 
 export async function createBooking(req, res) {
   try {
@@ -65,13 +64,7 @@ export async function createBooking(req, res) {
     const bookingId = generateBookingId();
     const pricing = calculateBookingPrice(roomType.pricePerNight, numberOfNights);
 
-    const clerkUser = await clerkClient.users.getUser(req.auth.userId);
-
-    const user = await findOrCreateUser(req.auth.userId, {
-      email: clerkUser.emailAddresses[0]?.emailAddress || clerkUser.primaryEmailAddress?.emailAddress,
-      firstName: clerkUser.firstName,
-      lastName: clerkUser.lastName
-    });
+    const user = await getUser(req.auth.userId);
 
     const booking = await prisma.booking.create({
       data: {
@@ -101,15 +94,6 @@ export async function createBooking(req, res) {
             role: true
           }
         }
-      }
-    });
-
-    await prisma.payment.create({
-      data: {
-        bookingId: booking.id,
-        xenditInvoiceId: `TEMP-${booking.bookingId}`,
-        amount: pricing.totalAmount,
-        paymentStatus: 'PENDING'
       }
     });
 
