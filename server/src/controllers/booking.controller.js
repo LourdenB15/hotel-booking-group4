@@ -83,15 +83,24 @@ export async function createBooking(req, res) {
         bookingStatus: 'PENDING'
       },
       include: {
-        property: true,
-        roomType: true,
-        user: {
+        property: {
           select: {
-            id: true,
-            email: true,
-            firstName: true,
-            lastName: true,
-            role: true
+            name: true,
+            address: true,
+            city: true,
+            contactEmail: true,
+            checkInTime: true,
+            checkOutTime: true
+          }
+        },
+        roomType: {
+          select: {
+            name: true,
+            bedConfiguration: true,
+            maxAdults: true,
+            maxChildren: true,
+            pricePerNight: true,
+            amenities: true
           }
         }
       }
@@ -129,8 +138,26 @@ export async function getMyBookings(req, res) {
     const bookings = await prisma.booking.findMany({
       where: { userId: user.id },
       include: {
-        property: true,
-        roomType: true
+        property: {
+          select: {
+            name: true,
+            address: true,
+            city: true,
+            contactEmail: true,
+            checkInTime: true,
+            checkOutTime: true
+          }
+        },
+        roomType: {
+          select: {
+            name: true,
+            bedConfiguration: true,
+            maxAdults: true,
+            maxChildren: true,
+            pricePerNight: true,
+            amenities: true
+          }
+        }
       },
       orderBy: { createdAt: 'desc' }
     });
@@ -157,16 +184,31 @@ export async function getBookingById(req, res) {
     const booking = await prisma.booking.findUnique({
       where: { id },
       include: {
-        property: true,
-        roomType: true,
+        property: {
+          select: {
+            name: true,
+            address: true,
+            city: true,
+            contactEmail: true,
+            checkInTime: true,
+            checkOutTime: true
+          }
+        },
+        roomType: {
+          select: {
+            name: true,
+            bedConfiguration: true,
+            maxAdults: true,
+            maxChildren: true,
+            pricePerNight: true,
+            amenities: true
+          }
+        },
         user: {
           select: {
-            id: true,
-            clerkUserId: true,
             email: true,
             firstName: true,
-            lastName: true,
-            role: true
+            lastName: true
           }
         }
       }
@@ -278,15 +320,24 @@ export async function cancelBooking(req, res) {
         bookingStatus: 'CANCELLED'
       },
       include: {
-        property: true,
-        roomType: true,
-        user: {
+        property: {
           select: {
-            id: true,
-            email: true,
-            firstName: true,
-            lastName: true,
-            role: true
+            name: true,
+            address: true,
+            city: true,
+            contactEmail: true,
+            checkInTime: true,
+            checkOutTime: true
+          }
+        },
+        roomType: {
+          select: {
+            name: true,
+            bedConfiguration: true,
+            maxAdults: true,
+            maxChildren: true,
+            pricePerNight: true,
+            amenities: true
           }
         }
       }
