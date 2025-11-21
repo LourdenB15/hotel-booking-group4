@@ -1,65 +1,59 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
+// Layout
+import Layout from './components/layout/Layout'
+
+// Page imports
+import Home from './pages/Home'
+import Properties from './pages/Properties'
+import PropertyDetails from './pages/PropertyDetails'
+import Booking from './pages/Booking'
+import BookingConfirmation from './pages/BookingConfirmation'
+import MyBookings from './pages/MyBookings'
+import NotFound from './pages/NotFound'
+
+// Dashboard pages (Hotel Owner)
+import OwnerDashboard from './pages/Dashboard/OwnerDashboard'
+import OwnerProperties from './pages/Dashboard/OwnerProperties'
+import OwnerBookings from './pages/Dashboard/OwnerBookings'
+
+// Admin pages
+import AdminDashboard from './pages/Admin/AdminDashboard'
+import PendingProperties from './pages/Admin/PendingProperties'
+import AllBookings from './pages/Admin/AllBookings'
+import UserManagement from './pages/Admin/UserManagement'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="min-h-screen bg-lightest p-lg">
-      <div className="mx-auto">
-        <h1 className="text-[length:var(--font-size-title)] font-bold text-primary mb-lg">
-          SkyBridge Travels
-        </h1>
-        <p className="text-medium mb-md">
-          Tailwind CSS v4 with custom theme is working!
-        </p>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          {/* Public Routes */}
+          <Route index element={<Home />} />
+          <Route path="properties" element={<Properties />} />
+          <Route path="properties/:id" element={<PropertyDetails />} />
 
-        <div className="bg-white rounded-xl shadow-md p-lg mb-md">
-          <h2 className="text-[length:var(--font-size-section)] font-semibold text-dark mb-sm">
-            Theme Test
-          </h2>
-          <div className="flex gap-sm flex-wrap">
-            <span className="bg-primary text-white px-md py-sm rounded-md">Primary</span>
-            <span className="bg-success text-white px-md py-sm rounded-md">Success</span>
-            <span className="bg-error text-white px-md py-sm rounded-md">Error</span>
-            <span className="bg-warning text-dark px-md py-sm rounded-md">Warning</span>
-            <span className="bg-info text-white px-md py-sm rounded-md">Info</span>
-          </div>
-        </div>
+          {/* Customer Routes */}
+          <Route path="booking/new" element={<Booking />} />
+          <Route path="booking/confirmation/:id" element={<BookingConfirmation />} />
+          <Route path="my-bookings" element={<MyBookings />} />
 
-        <button
-          onClick={() => setCount((count) => count + 1)}
-          className="bg-primary hover:bg-primary-hover text-white px-lg py-md rounded-md font-semibold transition-colors cursor-pointer"
-        >
-          Count is {count}
-        </button>
+          {/* Hotel Owner Dashboard Routes */}
+          <Route path="dashboard" element={<OwnerDashboard />} />
+          <Route path="dashboard/properties" element={<OwnerProperties />} />
+          <Route path="dashboard/bookings" element={<OwnerBookings />} />
 
-        <div className="bg-white rounded-xl shadow-md p-lg mt-md">
-          <h2 className="text-[length:var(--font-size-section)] font-semibold text-dark mb-sm">
-            Environment Variables Test
-          </h2>
-          <ul className="text-[length:var(--font-size-small)] text-medium space-y-xs font-mono">
-            <li>
-              VITE_API_URL: {import.meta.env.VITE_API_URL || <span className="text-error">Not set</span>}
-            </li>
-            <li>
-              VITE_CLERK_PUBLISHABLE_KEY: {import.meta.env.VITE_CLERK_PUBLISHABLE_KEY ?
-                <span className="text-success">✓ Set</span> :
-                <span className="text-error">✗ Not set</span>}
-            </li>
-            <li>
-              VITE_XENDIT_PUBLIC_KEY: {import.meta.env.VITE_XENDIT_PUBLIC_KEY ?
-                <span className="text-success">✓ Set</span> :
-                <span className="text-error">✗ Not set</span>}
-            </li>
-            <li>
-              VITE_CLOUDINARY_CLOUD_NAME: {import.meta.env.VITE_CLOUDINARY_CLOUD_NAME ?
-                <span className="text-success">✓ Set</span> :
-                <span className="text-error">✗ Not set</span>}
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+          {/* Admin Routes */}
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/properties/pending" element={<PendingProperties />} />
+          <Route path="admin/bookings" element={<AllBookings />} />
+          <Route path="admin/users" element={<UserManagement />} />
+
+          {/* 404 Route */}
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
