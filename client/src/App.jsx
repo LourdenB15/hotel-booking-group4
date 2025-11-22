@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // Layout
 import Layout from './components/layout/Layout'
 
+// Components
+import ProtectedRoute from './components/common/ProtectedRoute'
+
 // Page imports
 import Home from './pages/Home'
 import Properties from './pages/Properties'
@@ -33,21 +36,21 @@ function App() {
           <Route path="properties" element={<Properties />} />
           <Route path="properties/:id" element={<PropertyDetails />} />
 
-          {/* Customer Routes */}
-          <Route path="booking/new" element={<Booking />} />
-          <Route path="booking/confirmation/:id" element={<BookingConfirmation />} />
-          <Route path="my-bookings" element={<MyBookings />} />
+          {/* Customer Routes (require authentication) */}
+          <Route path="booking/new" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+          <Route path="booking/confirmation/:id" element={<ProtectedRoute><BookingConfirmation /></ProtectedRoute>} />
+          <Route path="my-bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
 
-          {/* Hotel Owner Dashboard Routes */}
-          <Route path="dashboard" element={<OwnerDashboard />} />
-          <Route path="dashboard/properties" element={<OwnerProperties />} />
-          <Route path="dashboard/bookings" element={<OwnerBookings />} />
+          {/* Hotel Owner Dashboard Routes (require HOTEL_OWNER or ADMIN role) */}
+          <Route path="dashboard" element={<ProtectedRoute allowedRoles={['HOTEL_OWNER', 'ADMIN']}><OwnerDashboard /></ProtectedRoute>} />
+          <Route path="dashboard/properties" element={<ProtectedRoute allowedRoles={['HOTEL_OWNER', 'ADMIN']}><OwnerProperties /></ProtectedRoute>} />
+          <Route path="dashboard/bookings" element={<ProtectedRoute allowedRoles={['HOTEL_OWNER', 'ADMIN']}><OwnerBookings /></ProtectedRoute>} />
 
-          {/* Admin Routes */}
-          <Route path="admin" element={<AdminDashboard />} />
-          <Route path="admin/properties/pending" element={<PendingProperties />} />
-          <Route path="admin/bookings" element={<AllBookings />} />
-          <Route path="admin/users" element={<UserManagement />} />
+          {/* Admin Routes (require ADMIN role) */}
+          <Route path="admin" element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="admin/properties/pending" element={<ProtectedRoute allowedRoles={['ADMIN']}><PendingProperties /></ProtectedRoute>} />
+          <Route path="admin/bookings" element={<ProtectedRoute allowedRoles={['ADMIN']}><AllBookings /></ProtectedRoute>} />
+          <Route path="admin/users" element={<ProtectedRoute allowedRoles={['ADMIN']}><UserManagement /></ProtectedRoute>} />
 
           {/* 404 Route */}
           <Route path="*" element={<NotFound />} />

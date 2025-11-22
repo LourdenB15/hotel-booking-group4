@@ -4,6 +4,7 @@ import {
   SignedIn,
   SignedOut,
   SignInButton,
+  SignUpButton,
   UserButton,
 } from '@clerk/clerk-react'
 
@@ -99,23 +100,28 @@ function Header() {
             >
               Dashboard
             </Link>
-            <UserButton />
+            <UserButton userProfileMode="modal" />
           </SignedIn>
           <SignedOut>
-            <SignInButton mode="modal">
+            <SignInButton mode="modal" fallbackRedirectUrl="/">
               <button className="bg-primary hover:bg-primary-hover text-white px-md py-sm rounded-md font-semibold transition-colors cursor-pointer">
                 Sign In
               </button>
             </SignInButton>
+            <SignUpButton mode="modal" fallbackRedirectUrl="/">
+              <button className="border border-primary text-primary hover:bg-primary hover:text-white px-md py-sm rounded-md font-semibold transition-colors cursor-pointer">
+                Sign Up
+              </button>
+            </SignUpButton>
           </SignedOut>
         </nav>
 
         <div className="md:hidden">
           <SignedIn>
-            <UserButton />
+            <UserButton userProfileMode="modal" />
           </SignedIn>
           <SignedOut>
-            <SignInButton mode="modal">
+            <SignInButton mode="modal" fallbackRedirectUrl="/">
               <button className="bg-primary hover:bg-primary-hover text-white px-3 py-1.5 rounded-md text-sm font-semibold transition-colors cursor-pointer">
                 Sign In
               </button>
